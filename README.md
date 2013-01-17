@@ -49,7 +49,7 @@ Assume we want to implement a module with Fibonacci and factorial functions
 implementations. First, we can implement a prototype on Python to understand
 how functions should work. The major advantage here is that we can use high
 level entities and libraries available in Python (but not in C).
-<pre>
+```python
 def factorial (n):
   if n <= 1:
     return 1
@@ -60,11 +60,12 @@ def fibonacci(n):
     return n
   else:
     return fibonacci (n - 1) + fibonacci (n - 2)
-</pre>
+```
 
 Once done, we can implemented a module with Fibonacci and factorial sequences
 computation in C.
-<pre>
+
+```c
 unsigned long long
 factorial (unsigned long long n)
 {
@@ -72,7 +73,7 @@ factorial (unsigned long long n)
     return 1;
   else
     return n * factorial (n - 1);
-}
+
 
 unsigned long long
 fibonacci (unsigned long long n)
@@ -82,12 +83,13 @@ fibonacci (unsigned long long n)
   else
     return fibonacci (n - 1) + fibonacci (n - 2);
 }
-</pre>
+```
 
 Both prototype and implementation must have the same file name without an
 extension. In our case we will call them `totest.py` and `totest.c`.
 
 Then let's compile C code as the library:
+
 <pre>
   $ gcc -c -fpic totest.c -o totest.o
   $ gcc -shared totest.o -o libtotest.so
@@ -97,7 +99,8 @@ The compiled library must have `lib` prefix in the filename.
 
 Finally, the corectness of the implementation can be checked using PIPO. We write
 a testing scenario for given module:
-<pre>
+
+```c
 validate totest
 {
   function factorial {
@@ -115,16 +118,18 @@ validate totest
     (20)
   }
 }
-</pre>
+```
 
 Assume it is called `test.pp`. Let's run PIPO translator to produce a unittest
 python file:
+
 <pre>
   $ ./pipo test.pp
 </pre>
 
 It produces `test.py` file which can run and check calculations result 
 correspondance between C code and Python prototype:
+
 <pre>
 $ python test.py
 test_factorial (__main__.Test_totest) ... ok
